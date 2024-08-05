@@ -6,8 +6,10 @@ export interface Blog {
     "title":string,
     "content":string,
     "id":string,
+    "date":string,
     "author":{
-        "name":string
+        "name":string,
+        "punchline":string
     }
 }
 

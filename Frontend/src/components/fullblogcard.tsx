@@ -1,22 +1,21 @@
-import { Blog } from "../myhooks/useblogs";
 import { Avatar } from "./avatar";
-
-export const Fullblogcard = ({
-//   title = "Taxing Laughter: The Joke Tax Chronicles",
-  date = "August 24,2023",
-//   content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-//   name = "Jokester",
-  authordescription = "Master of myth, purveyor of puns, and the funniest person in the seven kingdoms",
-Blog
-}:Blog) => {
+interface BlogCardInput {
+    authorname:string,
+    publishdate:string,
+    title:string,
+    content:string,
+    punchline:string
+}
+export const Fullblogcard = ({title,publishdate,content,authorname,punchline}:BlogCardInput) => {
+    console.log(title);
   return (
     
     <div className="px-10 py-5 grid grid-cols-12">
         <div className="col-span-8">
             <div>
-            <div className="text-4xl font-extrabold">{Blog.title}</div>
-            <div className="text-gray-500 my-3">Posted on {date}</div>
-            <div className="text-sm">{Blog.content}</div>
+            <div className="text-4xl font-extrabold">{title}</div>
+            <div className="text-gray-500 my-3">Posted on {publishdate}</div>
+            <div className="text-sm">{content}</div>
             </div>
         </div>
         <div className="ml-5 col-span-4">
@@ -27,14 +26,14 @@ Blog
         
             <div className="flex  mb-3">
                 <div className="mr-2 flex items-center justify-center">
-                    <Avatar name={Blog.author.name}></Avatar>
+                    <Avatar name={authorname}></Avatar>
                 </div>
                 <div className="text-lg font-bold">
-                    {Blog.author.name}
+                    {authorname}
                 </div>
             </div>
             <div>
-                {authordescription}
+                {punchline}
             </div>
             
             </div>

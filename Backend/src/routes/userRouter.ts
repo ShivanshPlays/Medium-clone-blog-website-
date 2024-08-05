@@ -33,7 +33,8 @@ userRouter.post('/signup', async (c) => {
         data:{
             email :body.email,
             password :body.password,
-            name :body.name
+            name :body.name,
+            punchline :body.punchline
         },
         })
 

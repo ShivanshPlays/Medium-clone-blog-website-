@@ -39,7 +39,7 @@ export const Blogs = ()=>{
                         <Link to={`/blog/${blog.id}`}>
                             <BlogCard 
                                 authorname={blog.author.name} 
-                                publishdate={"Dec 3,2023"} 
+                                publishdate={blog.date} 
                                 title={blog.title} 
                                 content={blog.content}>
                             </BlogCard>

@@ -1,8 +1,7 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { decode, sign, verify } from 'hono/jwt'
-import { Bindings } from 'hono/types';
+import { verify } from 'hono/jwt'
 import _default from 'hono/jsx';
 import { createBlog, updateBlog } from '@shivanshplays/medium-common';
 
@@ -44,6 +43,14 @@ blogRouter.use("/*",async (c,next)=>{
 });
 
 blogRouter.post('/', async (c) => {
+    function getFormattedDate(): string {
+        const date: Date = new Date();
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-IN', options);
+    }
+    
+    console.log(getFormattedDate());
+    const date=(getFormattedDate());
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
@@ -64,7 +71,8 @@ blogRouter.post('/', async (c) => {
         data:{
             title :body.title,
             content :body.content,
-            authorId : authorId
+            authorId : authorId,
+            date : date
         },
         })
     
@@ -130,9 +138,11 @@ blogRouter.get('/bulk', async (c) => {
                 title:true,
                 content:true,
                 id:true,
+                date:true,
                 author:{
                     select:{
-                        name:true
+                        name:true,
+                        punchline:true
                     }
                 }
             }
@@ -165,9 +175,11 @@ blogRouter.get('/:id', async(c) => {
                 title:true,
                 content:true,
                 id:true,
+                date:true,
                 author:{
                     select:{
-                        name:true
+                        name:true,
+                        punchline:true
                     }
                 }
             }

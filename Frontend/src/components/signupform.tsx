@@ -13,8 +13,8 @@ export const Signupform =()=>{
     const [postInputs,setPostInputs]=useState<signupInput>({
         name:"",
         email:"",
-        password:""
-    
+        password:"",
+        punchline:""
     })
     const navigate=useNavigate();
     async function sendRequest() {
@@ -45,6 +45,13 @@ export const Signupform =()=>{
                 name:e.target.value
             })
         }}></InputBox>
+
+        <InputBox name={"Punchline"} placeholder={"Master of myth, and the funniest person in the seven kingdoms"} onChange={(e)=>{
+            setPostInputs({
+                ...postInputs,
+                punchline:e.target.value
+            })
+        }}></InputBox>      
  
         <InputBox name={"Email"} placeholder={"JohnDoe123@gmail.com"} onChange={(e)=>{
             setPostInputs({

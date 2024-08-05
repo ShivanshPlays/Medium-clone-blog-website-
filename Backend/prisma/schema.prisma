@@ -19,6 +19,7 @@ model User {
   email    String   @unique
   name     String?
   password String
+  punchline String @default("")
   posts    Post[]
 }
 
@@ -27,6 +28,7 @@ model Post {
   title     String
   content   String
   published Boolean  @default(false)
+  date      String   @default("Aug 1,1977")
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
 }
