@@ -7,7 +7,6 @@ interface BlogCardInput {
     punchline:string
 }
 export const Fullblogcard = ({title,publishdate,content,authorname,punchline}:BlogCardInput) => {
-    console.log(title);
   return (
     
     <div className="px-10 py-5 grid grid-cols-12">
