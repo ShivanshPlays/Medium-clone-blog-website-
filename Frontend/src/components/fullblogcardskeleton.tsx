@@ -3,7 +3,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 export const FullBlogCardSkeleton = () => {
   return (
-    <div className="px-10 py-5 grid grid-cols-12">
+    <div className="px-10 py-5 grid grid-cols-12 h-screen">
       <div className="col-span-8">
         <div>
           <div className="text-4xl font-extrabold">

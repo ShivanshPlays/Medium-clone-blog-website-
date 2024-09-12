@@ -4,15 +4,24 @@
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts"
   },
+  "type": "module",
   "dependencies": {
     "@prisma/client": "^5.17.0",
     "@prisma/extension-accelerate": "^1.1.0",
-    "@shivanshplays/medium-common": "^1.0.4",
+    "@shivanshplays/medium-common": "^1.0.5",
+    "@types/bcrypt": "^5.0.2",
     "hono": "^4.5.3",
     "prisma": "^5.17.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
+    "@types/node": "^22.5.4",
+    "prisma": "^5.19.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
     "wrangler": "^3.57.2"
+  },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
   }
 }

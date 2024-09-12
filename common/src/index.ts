@@ -28,6 +28,12 @@ export const updateBlog =z.object({
     id:z.string()
 })
 
+export const deleteBlog =z.object({
+    id:z.string()
+})
+
+
+
 
 export type signupInput =z.infer<typeof signupInput>
 export type signinInput =z.infer<typeof signinInput>

@@ -20,11 +20,13 @@ export const Signinform =()=>{
     async function sendRequest() {
         try{
             const response= await axios.post(`${BACKEND_URL}/api/v1/user/signin`,postInputs);
-            const jwt = response.data.jwt;
+            const {jwt,name,id} = response.data;
             // const token = jwt.split(" ")[1];
             localStorage.setItem("token",jwt);
+            localStorage.setItem("name",name);
+            localStorage.setItem("id",id);
             // console.log(jwt);
-            navigate("/blogs");
+            navigate("/");
         }catch(e){
             //@ts-ignore //because i dont know the type of this axios error
             console.log(e.message);

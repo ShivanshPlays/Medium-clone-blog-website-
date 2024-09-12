@@ -9,7 +9,8 @@ export interface Blog {
     "date":string,
     "author":{
         "name":string,
-        "punchline":string
+        "punchline":string,
+        "id":string
     }
 }
 

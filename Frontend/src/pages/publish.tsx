@@ -10,10 +10,10 @@ export const Publish = () => {
     const [description, setDescription] = useState("");
     const navigate = useNavigate();
 
-    return <div>
+    return <div className=" bg-slate-600 h-screen">
             <Appbar />
        
-            <div className="flex justify-center items-center  pt-8"> 
+            <div className="flex justify-center items-center pt-20"> 
                 <div className="w-3/4">
                     <input onChange={(e) => {
                         setTitle(e.target.value)
@@ -22,7 +22,7 @@ export const Publish = () => {
                         setDescription(e.target.value)
                     }} />
                     <button onClick={async () => {
-                        const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
+                        const response = await axios.post(`${BACKEND_URL}/api/v1/blog/modify`, {
                             title,
                             content: description
                         }, {

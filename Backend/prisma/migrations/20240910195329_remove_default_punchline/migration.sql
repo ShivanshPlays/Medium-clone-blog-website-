@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "punchline" DROP NOT NULL,
+ALTER COLUMN "punchline" DROP DEFAULT;

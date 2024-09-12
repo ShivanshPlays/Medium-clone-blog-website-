@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { verify } from 'hono/jwt'
 import _default from 'hono/jsx';
-import { createBlog, updateBlog } from '@shivanshplays/medium-common';
+import { createBlog, updateBlog, deleteBlog } from '@shivanshplays/medium-common';
 
 export const blogRouter = new Hono<{
     Bindings: {
@@ -17,7 +17,9 @@ export const blogRouter = new Hono<{
     }
 }>();
 
-blogRouter.use("/*",async (c,next)=>{
+//user authentication middleware
+
+blogRouter.use("/modify",async (c,next)=>{
 
     const authHeader=c.req.header("Authorization")||"";
 
@@ -35,14 +37,16 @@ blogRouter.use("/*",async (c,next)=>{
     }catch(e){
         console.log("error is : "+e);
 
-        c.status(403);
+        c.status(401);
         return c.json({
             message:"unauthorised/token invaild"
         })
     }
 });
 
-blogRouter.post('/', async (c) => {
+//authenticated routes: post blog, edit blog, delete blog
+
+blogRouter.post('/modify', async (c) => {
     function getFormattedDate(): string {
         const date: Date = new Date();
         const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -57,9 +61,8 @@ blogRouter.post('/', async (c) => {
     
     const body=await c.req.json();
     const authorId = c.get("userid");
-
+    
     const {success} = createBlog.safeParse(body);
-    // console.log(body);
     if(!success){
         c.status(411);
         return c.json({
@@ -84,18 +87,22 @@ blogRouter.post('/', async (c) => {
     }catch(e){
         console.log(e);
         c.status(411);
-        return c.text("error while uploading blog post");
+        return c.json({
+            msg:"error while uploading blog post"}
+        );
     }
 })
 
-blogRouter.put('/', async(c) => {
+blogRouter.put('/modify', async(c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     
     const body=await c.req.json();
+    const authorId = c.get("userid");
+
     const {success} = updateBlog.safeParse(body);
-    // console.log(body);
+    
     if(!success){
         c.status(411);
         return c.json({
@@ -105,7 +112,8 @@ blogRouter.put('/', async(c) => {
     try{
         await prisma.post.update({
         where:{
-            id:body.id
+            id:body.id,
+            authorId : authorId
         },
         data:{
             title :body.title,
@@ -121,16 +129,60 @@ blogRouter.put('/', async(c) => {
     }catch(e){
         console.log(e);
         c.status(411);
-        return c.text("error while updating blog post");
+        return c.json({
+            msg:"error while updating blog post, maybe authorid is not matching"
+    });
     }
     
 })
 
+blogRouter.delete('/modify', async(c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    
+    const body=await c.req.json();
+    const authorId = c.get("userid");
+
+    const {success} = deleteBlog.safeParse(body);
+    // console.log(body);
+    if(!success){
+        c.status(411);
+        return c.json({
+            message:"missing blog id"
+        })
+    }
+    try{
+        await prisma.post.delete({
+        where:{
+            id:body.id,
+            authorId : authorId
+        }
+        })
+    
+        return c.json({
+            message:"blog deleted"
+        });
+    
+    
+    }catch(e){
+        console.log(e);
+        c.status(411);
+        return c.json({
+            msg:"error while deleting blog post"
+    });
+    }
+    
+})
+
+
+//open for all
 blogRouter.get('/bulk', async (c) => {
 
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
+    // .$extends(withAccelerate());
 
     try{
         const blogs= await prisma.post.findMany({
@@ -148,6 +200,12 @@ blogRouter.get('/bulk', async (c) => {
             }
         });
 
+        if(!blogs){
+            return c.json({
+                msg:"no blogs present"
+            })
+        }
+
         return c.json({
             blogs
         })
@@ -158,8 +216,6 @@ blogRouter.get('/bulk', async (c) => {
     }
     
 })
-
-
 
 blogRouter.get('/:id', async(c) => {
     const prisma = new PrismaClient({
@@ -178,12 +234,20 @@ blogRouter.get('/:id', async(c) => {
                 date:true,
                 author:{
                     select:{
+                        id:true,
                         name:true,
                         punchline:true
                     }
                 }
             }
         })
+
+        if(!blog){
+            c.status(422)
+            return c.json({
+                msg:"incorrect blog id"
+            })
+        }
     
         return c.json({
             blog
@@ -197,6 +261,6 @@ blogRouter.get('/:id', async(c) => {
     }
 })
 
-//TODO: add pagination
+
 
 

@@ -5,38 +5,41 @@ import { Appbar } from "../components/appbar";
 import { FullBlogCardSkeleton } from "../components/fullblogcardskeleton";
 
 export const Blog = () => {
-
   const { id } = useParams();
 
-  const { loading, blog } = useBlog({id:id||""});
+  const { loading, blog } = useBlog({ id: id || "" });
 
-  if(loading){
-    return <div>
-                <div>
-                    <Appbar/>
-                </div>
-                <div>
-                    <div>
-                        <FullBlogCardSkeleton></FullBlogCardSkeleton>
-                    </div>
-                </div>
-                
+  if (loading) {
+    return (
+      <div className="bg-slate-600">
+        <div>
+          <Appbar />
         </div>
-    }else{
-        return <div>
-                <div>
-                    <Appbar/>
-                </div>
-                <div>
-                    <Fullblogcard 
-                        title={blog?.title||""} 
-                        content={blog?.content||""} 
-                        publishdate={blog?.date||""} 
-                        authorname={blog?.author.name||""}
-                        punchline={blog?.author.punchline||""}
-                    ></Fullblogcard>
-                </div>
+        <div>
+          <div>
+            <FullBlogCardSkeleton></FullBlogCardSkeleton>
+          </div>
         </div>
-    }
-    
+      </div>
+    );
+  } else {
+    return (
+      <div className="bg-slate-600 h-screen">
+        <div>
+          <Appbar />
+        </div>
+        <div className="h-5/6">
+          <Fullblogcard
+            id={blog?.id||""}
+            title={blog?.title || ""}
+            content={blog?.content || ""}
+            publishdate={blog?.date || ""}
+            authorname={blog?.author.name || ""}
+            punchline={blog?.author.punchline || ""}
+            authorId={blog?.author.id||""}
+          ></Fullblogcard>
+        </div>
+      </div>
+    );
+  }
 };
