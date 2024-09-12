@@ -17,7 +17,7 @@ export const Appbar = () => {
       <div className="flex justify-center items-center font-bold text-xl">
         <Link to={"/"}>
           <img
-            src="TheStoryJunction.png"
+            src="/TheStoryJunction.png"
             className="h-20 w-80"
             alt="logo"
           ></img>
